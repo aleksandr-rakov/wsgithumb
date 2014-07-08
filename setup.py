@@ -30,7 +30,7 @@ setup(name='wsgithumb',
       install_requires=[
           # -*- Extra requirements: -*-
           'WebOb',
-          'PIL',
+#          'PIL',
       ],
       entry_points="""
       # -*- Entry points: -*-
