@@ -18,7 +18,7 @@ DEFAULT_SIZES = {
 
 
 def get_image_response(document_root=None, cache_directory=None,
-                       size=(500, 500), path=None, accel_header=None):
+                       size=(500, 500), path=None, accel_header=None,system_cb=None):
     """helper the get an image response"""
     #FIXME cache_directory can't be None
 
@@ -56,6 +56,12 @@ def get_image_response(document_root=None, cache_directory=None,
     # generate cached thumb if not yet done
     if not os.path.isfile(cached):
         resize(filename, cached, size)
+        if system_cb:
+            cb=system_cb
+            cb=cb.replace('{file}',cached)
+            cb=cb.replace('{dir}',os.path.dirname(cached))
+            os.system(cb)
+
 
     return get_file_response(cached,
                              document_root=cache_directory,
@@ -112,7 +118,8 @@ def add_thumb_view(config, route_name, sizes=DEFAULT_SIZES,
         return get_image_response(
             document_root=document_root,
             cache_directory=cache_directory,
-            size=size, path=path, accel_header=accel_header
+            size=size, path=path, accel_header=accel_header,
+            system_cb=settings.get('thumbs.system_cb')
         )
 
     config.add_route(route_name, '/%s/{size}/*path' % route_name)
