@@ -5,6 +5,7 @@ import stat
 from wsgithumb.utils import get_file_response
 from wsgithumb.utils import HTTPNotFound
 from wsgithumb.utils import resize
+import urllib
 
 DEFAULT_SIZES = {
     'icon': (16, 16),
@@ -59,6 +60,7 @@ def get_image_response(document_root=None, cache_directory=None,
         if system_cb:
             cb=system_cb
             cb=cb.replace('{file}',cached)
+            cb=cb.replace('{url}',urllib.quote(cached))
             cb=cb.replace('{dir}',os.path.dirname(cached))
             os.system(cb)
 
