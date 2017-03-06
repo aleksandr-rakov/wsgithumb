@@ -18,12 +18,20 @@ try:
 except ImportError:
     import Image  # NOQA
 
+#try to show truncated images
+#http://stackoverflow.com/questions/12984426/python-pil-ioerror-image-file-truncated-with-big-images
+try:
+    from PIL import ImageFile
+    ImageFile.LOAD_TRUNCATED_IMAGES = True
+except:
+    pass
 
 def resize(src, dst, size, mode='r'):
     """resize an image to size"""
     image = Image.open(src, mode)
     image.thumbnail(size, Image.ANTIALIAS)
-    image.save(dst)
+                   #if image has wrong extension, keep it
+    image.save(dst,image.format)
     return dst
 
 
